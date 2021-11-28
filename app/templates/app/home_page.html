@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+    {% include 'wagtail_lottie/lottie_animation.html' with value=page.lottie_animation_foreign_key %}
+    {% for block in page.lottie_animation_stream_field %}
+        {% include_block block %}
+    {% endfor %}
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'wagtail_lottie/lottie-player.js' %}"></script>
+    <script src="{% static 'wagtail_lottie/lottie-animation.js' %}"></script>
+{% endblock %}
+
+

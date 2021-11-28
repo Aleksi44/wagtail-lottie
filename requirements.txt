@@ -1,0 +1,4 @@
+Django>=3.2,<3.3
+wagtail>=2.15,<2.16
+flake8==4.0.1
+wagtail-generic-chooser==0.3.1

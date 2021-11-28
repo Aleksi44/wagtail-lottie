@@ -1,0 +1,5 @@
+include *.rst
+include AUTHORS
+include LICENSE
+recursive-include wagtail_lottie/templates *.html
+recursive-include wagtail_lottie/static *

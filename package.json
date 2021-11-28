@@ -1,0 +1,8 @@
+{
+  "name": "wagtail-lottie",
+  "version": "0.1.0",
+  "repository": "git@github.com:Aleksi44/wagtail-lottie.git",
+  "author": "Alexis LE BARON <hello@snoweb.io>",
+  "license": "GPL-3.0",
+  "dependencies": {}
+}
