@@ -25,7 +25,7 @@ Usage
 
 Can be used like this at Wagtail page level :
 
-.. code-block::
+.. code-block:: python
 
     from wagtail_lottie.models import LottieAnimation
     from wagtail_lottie.widgets import LottieAnimationChooser
@@ -47,7 +47,7 @@ Can be used like this at Wagtail page level :
 
 And rendered this way at html level :
 
-.. code-block::
+.. code-block:: html
 
 
     <!-- For ForeignKey -->
@@ -74,7 +74,7 @@ Install with pip :
 
 Add **wagtail_lottie** to Django apps installed :
 
-.. code-block::
+.. code-block:: python
 
     INSTALLED_APPS = [
         'wagtail_lottie',
@@ -91,7 +91,7 @@ Run some Django commands :
 
 Set if needed **Wagtail Lottie** download folder in the Django settings (default value is 'wagtail_lottie') :
 
-.. code-block::
+.. code-block:: python
 
     WAGTAIL_LOTTIE_UPLOAD_FOLDER = 'custom_location'
 
