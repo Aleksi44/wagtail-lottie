@@ -1,6 +1,8 @@
 import os
 from zipfile import BadZipFile, LargeZipFile
 from django.contrib import messages
+from django.conf import settings
+from django.core.files.storage import Storage
 from django.utils.translation import gettext_lazy as _
 from wagtail.contrib.modeladmin.views import CreateView
 from generic_chooser.views import ModelChooserViewSet
@@ -23,7 +25,7 @@ class CreateViewLottieAnimation(CreateView):
         response = super().form_valid(form)
 
         try:
-            lottie_zip_file = LottieZipFile(form.instance.zip_file.path)
+            lottie_zip_file = LottieZipFile(form.instance.zip_file)
         except (WagtailLottieException, BadZipFile, LargeZipFile) as err:
             self._delete_django_messages()
             messages.error(self.request, str(err))
