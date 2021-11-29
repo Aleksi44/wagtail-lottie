@@ -1,8 +1,7 @@
 import os
 from zipfile import BadZipFile, LargeZipFile
 from django.contrib import messages
-from django.conf import settings
-from django.core.files.storage import Storage
+from django.core.files.base import ContentFile
 from django.utils.translation import gettext_lazy as _
 from wagtail.contrib.modeladmin.views import CreateView
 from generic_chooser.views import ModelChooserViewSet
@@ -40,7 +39,7 @@ class CreateViewLottieAnimation(CreateView):
 
         self.instance.json_file.save(
             os.path.join(self.instance.uuid, 'body.json'),
-            lottie_zip_file.open(lottie_zip_file.json_path)
+            ContentFile(lottie_zip_file.read(lottie_zip_file.json_path))
         )
 
         for image in lottie_zip_file.images_path:
@@ -51,7 +50,7 @@ class CreateViewLottieAnimation(CreateView):
                     "images",
                     lottie_zip_file.extract_filename(image)
                 ),
-                lottie_zip_file.open(image)
+                ContentFile(lottie_zip_file.read(image))
             )
         return response
 

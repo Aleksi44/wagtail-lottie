@@ -7,8 +7,8 @@ from . import exceptions
 
 class LottieZipFile(zipfile.ZipFile):
 
-    def __init__(self, zip_file_path):
-        super().__init__(zip_file_path)
+    def __init__(self, zip_file):
+        super().__init__(zip_file)
         self.uuid = uuid.uuid4().hex
         self.name = ''
         self.json_path = ''

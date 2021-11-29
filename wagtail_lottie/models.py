@@ -70,6 +70,9 @@ class LottieAnimation(models.Model):
             )
         return super().__str__()
 
+    class Meta:
+        ordering = ['-id']
+
 
 class LottieAnimationImage(models.Model):
     animation = models.ForeignKey(LottieAnimation, on_delete=models.CASCADE, null=True)
