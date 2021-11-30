@@ -5,10 +5,9 @@ from . import _constants
 
 
 class TestLottieZipFile(SimpleTestCase):
-    def setUp(self):
-        self.lottie_zip_file = LottieZipFile(_constants.TEST_ZIP_FILE_PATH)
 
     def test_attr(self):
+        self.lottie_zip_file = LottieZipFile(_constants.TEST_ZIP_FILE_PATH)
         self.assertEqual(
             self.lottie_zip_file.extract_filename(self.lottie_zip_file.json_path),
             'body.json'
@@ -29,3 +28,6 @@ class TestLottieZipFile(SimpleTestCase):
             self.lottie_zip_file.version,
             "5.7.4"
         )
+
+    def test_mac_osx(self):
+        self.lottie_zip_file = LottieZipFile(_constants.TEST_ZIP_FILE_PATH_MAC_OSX)

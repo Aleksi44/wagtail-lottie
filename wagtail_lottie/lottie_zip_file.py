@@ -29,7 +29,7 @@ class LottieZipFile(zipfile.ZipFile):
         for file_to_extract in zip_files_list:
             if file_to_extract.endswith('.png'):
                 self.images_path.append(file_to_extract)
-            if file_to_extract.endswith('.json'):
+            if file_to_extract.endswith('.json') and "__MACOSX" not in file_to_extract:
                 if not self.json_path:
                     self.json_path = file_to_extract
                 else:
