@@ -4,5 +4,5 @@
      data-prefers-color-scheme="{{ value.prefers_color_scheme }}"
      data-loop="{{ value.loop }}"
      data-renderer="{{ value.renderer }}"
-     data-json="{{ value.json_file.url }}">
+     data-json="{{ value.json_file.url }}" {% block extra_attr %}{% endblock %}>
 </div>
