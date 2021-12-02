@@ -27,7 +27,9 @@ class LottieAnimationChooserBlock(ChooserBlock):
                                     'data-loop="{3}" ' \
                                     'data-renderer="{4}" ' \
                                     'data-json="{5}" ' \
-                                    'class="{6}"' \
+                                    'data-preserve-aspect-ratio="{6}" ' \
+                                    'data-animation-class="{7}" ' \
+                                    'class="{8}"' \
                                     '></div>'
             return format_html(
                 lottie_animation_html,
@@ -37,7 +39,9 @@ class LottieAnimationChooserBlock(ChooserBlock):
                 value.loop,
                 value.renderer,
                 value.json_file.url,
-                context.get('class', '') if context else ''
+                value.preserve_aspect_ratio,
+                context.get('animation_class', '') if context else '',
+                context.get('container_class', '') if context else ''
             )
         else:
             return ''

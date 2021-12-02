@@ -11,7 +11,11 @@ lottieElements.forEach(function (lottieElement) {
             loop: lottieElement.dataset.loop === 'True',
             autoplay: lottieElement.dataset.playMode === 'play_auto',
             name: lottieElement.dataset.name,
-            path: lottieElement.dataset.json
+            path: lottieElement.dataset.json,
+            rendererSettings: {
+                preserveAspectRatio: lottieElement.dataset.preserveAspectRatio,
+                className: lottieElement.dataset.class,
+            }
         })
         if (lottieElement.dataset.playMode === 'play_intersection') {
             const io = new IntersectionObserver(entries => entries.forEach((entry) => {

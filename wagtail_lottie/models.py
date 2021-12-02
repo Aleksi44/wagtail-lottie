@@ -30,6 +30,28 @@ class LottieAnimation(models.Model):
         (PREFERS_COLOR_SCHEME_LIGHT, _('Light')),
         (PREFERS_COLOR_SCHEME_DARK, _('Dark')),
     )
+    PRESERVE_ASPECT_RATIO_DEFAULT = "xMidYMid meet"
+    PRESERVE_ASPECT_RATIO_CHOICES = (
+        (PRESERVE_ASPECT_RATIO_DEFAULT, "xMidYMid meet"),
+        ("none", "None"),
+        ("xMinYMin meet", "xMinYMin meet"),
+        ("xMidYMin meet", "xMidYMin meet"),
+        ("xMaxYMin meet", "xMaxYMin meet"),
+        ("xMinYMid meet", "xMinYMid meet"),
+        ("xMaxYMid meet", "xMaxYMid meet"),
+        ("xMinYMax meet", "xMinYMax meet"),
+        ("xMidYMax meet", "xMidYMax meet"),
+        ("xMaxYMax meet", "xMaxYMax meet"),
+        ("xMinYMin slice", "xMinYMin slice"),
+        ("xMidYMin slice", "xMidYMin slice"),
+        ("xMaxYMin slice", "xMaxYMin slice"),
+        ("xMinYMid slice", "xMinYMid slice"),
+        ("xMidYMid slice", "xMidYMid slice"),
+        ("xMaxYMid slice", "xMaxYMid slice"),
+        ("xMinYMax slice", "xMinYMax slice"),
+        ("xMidYMax slice", "xMidYMax slice"),
+        ("xMaxYMax slice", "xMaxYMax slice"),
+    )
     zip_file = models.FileField(
         upload_to=constants.WAGTAIL_LOTTIE_UPLOAD_FOLDER_TMP,
         verbose_name=_("ZIP file"),
@@ -44,6 +66,11 @@ class LottieAnimation(models.Model):
         choices=PREFERS_COLOR_SCHEME_CHOICES,
         max_length=20,
         default=PREFERS_COLOR_SCHEME_NONE
+    )
+    preserve_aspect_ratio = models.CharField(
+        choices=PRESERVE_ASPECT_RATIO_CHOICES,
+        max_length=20,
+        default=PRESERVE_ASPECT_RATIO_DEFAULT
     )
 
     created = models.DateTimeField(auto_now_add=True, null=True)

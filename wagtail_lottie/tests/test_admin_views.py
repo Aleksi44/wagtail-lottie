@@ -31,7 +31,8 @@ class TestImageCreateView(TestCase, WagtailTestUtils):
                 'play_mode': LottieAnimation.PLAY_MODE_AUTO,
                 'loop': True,
                 'renderer': LottieAnimation.RENDERER_SVG,
-                'prefers_color_scheme': LottieAnimation.PREFERS_COLOR_SCHEME_NONE
+                'prefers_color_scheme': LottieAnimation.PREFERS_COLOR_SCHEME_NONE,
+                'preserve_aspect_ratio': LottieAnimation.PRESERVE_ASPECT_RATIO_DEFAULT
             })
 
         # Should redirect back to index
@@ -49,6 +50,12 @@ class TestImageCreateView(TestCase, WagtailTestUtils):
         )
 
         animation_london_rendition = LottieAnimationChooserBlock().render(animation_london, {
-            'class': 'w-full'
+            'animation_class': 'w-full',
+            'container_class': 'h-full',
         })
-        self.assertIn('class="w-full"', animation_london_rendition)
+        self.assertIn(
+            'data-preserve-aspect-ratio="%s"' % LottieAnimation.PRESERVE_ASPECT_RATIO_DEFAULT,
+            animation_london_rendition
+        )
+        self.assertIn('data-animation-class="w-full"', animation_london_rendition)
+        self.assertIn('class="h-full"', animation_london_rendition)
