@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from wagtail.tests.utils import WagtailTestUtils
 from wagtail_lottie.models import LottieAnimation
+from wagtail_lottie.blocks import LottieAnimationChooserBlock
 
 from . import _constants
 
@@ -38,10 +39,16 @@ class TestImageCreateView(TestCase, WagtailTestUtils):
 
         # Check that the animation was created
         animations = LottieAnimation.objects.filter(name="London")
+        animation_london = animations.first()
         self.assertEqual(animations.count(), 1)
 
         # Check that images was created
         self.assertEqual(
-            animations.first().lottieanimationimage_set.count(),
+            animation_london.lottieanimationimage_set.count(),
             49
         )
+
+        animation_london_rendition = LottieAnimationChooserBlock().render(animation_london, {
+            'class': 'w-full'
+        })
+        self.assertIn('class="w-full"', animation_london_rendition)
