@@ -14,7 +14,7 @@ lottieElements.forEach(function (lottieElement) {
             path: lottieElement.dataset.json,
             rendererSettings: {
                 preserveAspectRatio: lottieElement.dataset.preserveAspectRatio,
-                className: lottieElement.dataset.class,
+                className: lottieElement.dataset.animationClass,
             }
         })
         if (lottieElement.dataset.playMode === 'play_intersection') {
