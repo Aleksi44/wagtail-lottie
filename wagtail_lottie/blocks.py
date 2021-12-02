@@ -37,7 +37,7 @@ class LottieAnimationChooserBlock(ChooserBlock):
                 value.loop,
                 value.renderer,
                 value.json_file.url,
-                context.get('class', '')
+                context.get('class', '') if context else ''
             )
         else:
             return ''
