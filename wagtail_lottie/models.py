@@ -1,7 +1,6 @@
 import os
 from django.utils.translation import gettext_lazy as _
 from django.db import models
-from django.core.files import File
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
 from zipfile import BadZipFile, LargeZipFile
@@ -95,7 +94,6 @@ class LottieAnimation(models.Model):
     )
 
     __original_zip_file = None
-    __lottie_zip_file = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -117,38 +115,34 @@ class LottieAnimation(models.Model):
             return object_str
         return super().__str__()
 
-    def clean(self):
-        if self.zip_file != self.__original_zip_file:
-            try:
-                self.__lottie_zip_file = LottieZipFile(self.zip_file)
-            except (WagtailLottieException, BadZipFile, LargeZipFile) as err:
-                raise ValidationError(str(err))
-
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         zip_file_changed = self.zip_file != self.__original_zip_file
+        lottie_zip_file = None
+
         if zip_file_changed:
-            self.uuid = self.__lottie_zip_file.uuid
-            self.name = self.__lottie_zip_file.name
-            self.width = self.__lottie_zip_file.width
-            self.height = self.__lottie_zip_file.height
-            self.version = self.__lottie_zip_file.version
-            self.json_file = File(
-                ContentFile(self.__lottie_zip_file.read(self.__lottie_zip_file.json_path)),
-                name=os.path.join(self.uuid, 'body.json'),
+            try:
+                lottie_zip_file = LottieZipFile(self.zip_file)
+            except (WagtailLottieException, BadZipFile, LargeZipFile) as err:
+                raise ValidationError(str(err))
+            self.uuid = lottie_zip_file.uuid
+            self.name = lottie_zip_file.name
+            self.width = lottie_zip_file.width
+            self.height = lottie_zip_file.height
+            self.version = lottie_zip_file.version
+            self.json_file = ContentFile(
+                lottie_zip_file.read(lottie_zip_file.json_path),
+                name=os.path.join(self.uuid, 'body.json')
             )
         super().save(force_insert, force_update, *args, **kwargs)
-        if zip_file_changed:
+        if zip_file_changed and lottie_zip_file:
             self.lottieanimationimage_set.all().delete()
-            for image in self.__lottie_zip_file.images_path:
+            for image in lottie_zip_file.images_path:
                 lottie_animation = LottieAnimationImage.objects.create(animation_id=self.id)
-                lottie_animation.image.save(
-                    os.path.join(
-                        self.uuid,
-                        "images",
-                        self.__lottie_zip_file.extract_filename(image)
-                    ),
-                    ContentFile(self.__lottie_zip_file.read(image))
+                lottie_animation.image = ContentFile(
+                    lottie_zip_file.read(image),
+                    name=os.path.join(self.uuid, "images", lottie_zip_file.extract_filename(image))
                 )
+                lottie_animation.save()
         self.__original_name = self.zip_file
 
     class Meta:
