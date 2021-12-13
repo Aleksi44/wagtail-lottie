@@ -4,7 +4,7 @@ from wagtail.contrib.modeladmin.options import (
 )
 from wagtail.core import hooks
 from wagtail.admin.site_summary import SummaryItem
-from .views import LottieAnimationChooserViewSet, CreateViewLottieAnimation
+from .views import LottieAnimationChooserViewSet
 from .models import LottieAnimation
 
 
@@ -37,7 +37,6 @@ class LottieAnimationModelAdmin(ModelAdmin):
     exclude_from_explorer = False
     list_display = ('__str__',)
     search_fields = ('name',)
-    create_view_class = CreateViewLottieAnimation
     form_fields_exclude = ['name', 'json_file', 'uuid', 'version', 'width', 'height']
 
 

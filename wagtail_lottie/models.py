@@ -1,7 +1,14 @@
+import os
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django.core.files import File
 from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
+from zipfile import BadZipFile, LargeZipFile
+from django.core.files.base import ContentFile
 
+from .lottie_zip_file import LottieZipFile
+from .exceptions import WagtailLottieException
 from . import constants
 
 
@@ -52,6 +59,7 @@ class LottieAnimation(models.Model):
         ("xMidYMax slice", "xMidYMax slice"),
         ("xMaxYMax slice", "xMaxYMax slice"),
     )
+    title = models.CharField(default=None, null=True, max_length=100)
     zip_file = models.FileField(
         upload_to=constants.WAGTAIL_LOTTIE_UPLOAD_FOLDER_TMP,
         verbose_name=_("ZIP file"),
@@ -86,16 +94,62 @@ class LottieAnimation(models.Model):
         null=True
     )
 
+    __original_zip_file = None
+    __lottie_zip_file = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_zip_file = self.zip_file
+
     def __str__(self):
-        if self.name and self.play_mode and self.prefers_color_scheme and self.renderer:
-            return "%s %s %s %s %s" % (
+        object_str = ""
+        if self.title:
+            object_str += self.title.title()
+        if self.play_mode and self.prefers_color_scheme and self.renderer:
+            object_str += " (%s %s %s %s %s)" % (
                 self.name,
                 self.play_mode,
                 self.prefers_color_scheme,
                 self.renderer,
                 self.id
             )
+        if object_str:
+            return object_str
         return super().__str__()
+
+    def clean(self):
+        if self.zip_file != self.__original_zip_file:
+            try:
+                self.__lottie_zip_file = LottieZipFile(self.zip_file)
+            except (WagtailLottieException, BadZipFile, LargeZipFile) as err:
+                raise ValidationError(str(err))
+
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        zip_file_changed = self.zip_file != self.__original_zip_file
+        if zip_file_changed:
+            self.uuid = self.__lottie_zip_file.uuid
+            self.name = self.__lottie_zip_file.name
+            self.width = self.__lottie_zip_file.width
+            self.height = self.__lottie_zip_file.height
+            self.version = self.__lottie_zip_file.version
+            self.json_file = File(
+                ContentFile(self.__lottie_zip_file.read(self.__lottie_zip_file.json_path)),
+                name=os.path.join(self.uuid, 'body.json'),
+            )
+        super().save(force_insert, force_update, *args, **kwargs)
+        if zip_file_changed:
+            self.lottieanimationimage_set.all().delete()
+            for image in self.__lottie_zip_file.images_path:
+                lottie_animation = LottieAnimationImage.objects.create(animation_id=self.id)
+                lottie_animation.image.save(
+                    os.path.join(
+                        self.uuid,
+                        "images",
+                        self.__lottie_zip_file.extract_filename(image)
+                    ),
+                    ContentFile(self.__lottie_zip_file.read(image))
+                )
+        self.__original_name = self.zip_file
 
     class Meta:
         ordering = ['-id']
