@@ -27,4 +27,10 @@ lottieElements.forEach(function (lottieElement) {
             io.observe(lottieElement)
         }
     }
+    if (isSchemeDark && lottieElement.dataset.prefersColorScheme === 'scheme_light') {
+        lottieElement.style.display = "none";
+    }
+    else if (!isSchemeDark && lottieElement.dataset.prefersColorScheme === 'scheme_dark') {
+        lottieElement.style.display = "none";
+    }
 })
