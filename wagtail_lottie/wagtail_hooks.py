@@ -10,7 +10,7 @@ from .models import LottieAnimation
 
 class LottieAnimationSummaryItem(SummaryItem):
     order = 410
-    template = "wagtail_lottie/homepage/site_summary_lottie_animation.html"
+    template_name = "wagtail_lottie/homepage/site_summary_lottie_animation.html"
 
     def get_context_data(self, parent_context):
         return {
