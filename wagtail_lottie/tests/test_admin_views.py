@@ -2,7 +2,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files import File
 from django.test import TestCase
 from django.urls import reverse
-from wagtail.tests.utils import WagtailTestUtils
+from wagtail.test.utils import WagtailTestUtils
 from wagtail_lottie.models import LottieAnimation
 from wagtail_lottie.blocks import LottieAnimationChooserBlock
 

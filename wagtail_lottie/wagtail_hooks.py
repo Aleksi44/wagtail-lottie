@@ -2,7 +2,7 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin,
     modeladmin_register
 )
-from wagtail.core import hooks
+from wagtail import hooks
 from wagtail.admin.site_summary import SummaryItem
 from .views import LottieAnimationChooserViewSet
 from .models import LottieAnimation

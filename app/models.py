@@ -1,9 +1,9 @@
 from django.db import models
 
-from wagtail.core.models import Page
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
-from wagtail.core.fields import StreamField
-from wagtail.core import blocks
+from wagtail.models import Page
+from wagtail.admin.panels import FieldPanel
+from wagtail.fields import StreamField
+from wagtail import blocks
 
 from wagtail_lottie.models import LottieAnimation
 from wagtail_lottie.widgets import LottieAnimationChooser
@@ -18,9 +18,9 @@ class HomePage(Page):
     lottie_animation_stream_field = StreamField([
         ('lottie_animation_block', LottieAnimationChooserBlock()),
         ('rich_text', blocks.RichTextBlock())
-    ], default=None, blank=True)
+    ], default=None, blank=True, use_json_field=True)
 
     content_panels = [
         FieldPanel('lottie_animation_foreign_key', widget=LottieAnimationChooser),
-        StreamFieldPanel('lottie_animation_stream_field')
+        FieldPanel('lottie_animation_stream_field')
     ]

@@ -2,8 +2,8 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 import wagtail_lottie.blocks
 
 
@@ -23,6 +23,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='homepage',
             name='lottie_animation_stream_field',
-            field=wagtail.core.fields.StreamField([('lottie_animation_block', wagtail_lottie.blocks.LottieAnimationChooserBlock()), ('rich_text', wagtail.core.blocks.RichTextBlock())], blank=True, default=None),
+            field=wagtail.fields.StreamField([('lottie_animation_block', wagtail_lottie.blocks.LottieAnimationChooserBlock()), ('rich_text', wagtail.blocks.RichTextBlock())], blank=True, default=None),
         ),
     ]
