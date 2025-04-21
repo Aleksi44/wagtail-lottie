@@ -78,7 +78,7 @@ Add **wagtail_lottie** to Django apps installed :
 
     INSTALLED_APPS = [
         'wagtail_lottie',
-        'wagtail.contrib.modeladmin',
+        'wagtail_modeladmin',
         'generic_chooser',
         ...
     ]

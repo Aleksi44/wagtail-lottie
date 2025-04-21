@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'wagtail_lottie',
     'app',
 
-    'wagtail.contrib.modeladmin',
+    'wagtail_modeladmin',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
